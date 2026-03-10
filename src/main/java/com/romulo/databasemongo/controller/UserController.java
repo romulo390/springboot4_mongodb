@@ -1,28 +1,60 @@
 package com.romulo.databasemongo.controller;
 
-import com.romulo.databasemongo.domain.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.net.URI;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.romulo.databasemongo.domain.User;
+import com.romulo.databasemongo.dto.UserDto;
+import com.romulo.databasemongo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.util.List;
 
 @RestController()
 @RequestMapping("/users")
 public class UserController {
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping()
-    public ResponseEntity<List<User>> findAll() {
-            User romulo = new User("1","Romulo","romulo@tipo.com");
-            User ilza = new User("2","ilza","ilza@tipo.com");
-            List<User> userList = new ArrayList<>();
-            userList.addAll(Arrays.asList(romulo,ilza));
-            return ResponseEntity.ok().body(userList);
+    public ResponseEntity<List<UserDto>> findAll() {
+            List<User> userList = userService.findAll();
+            List<UserDto> userDtoList = userList.stream().map(UserDto::new).toList();
+            return ResponseEntity.ok().body(userDtoList);
             //OU - return  new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getById(@PathVariable String id) {
+        User user = userService.findById(id);
+        return ResponseEntity.ok().body(new UserDto(user));
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> insert(@RequestBody UserDto  userDto) {
+        User user = userService.fromDto(userDto);
+        user =  userService.insert(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
 
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@RequestBody UserDto userDto, @PathVariable String id) {
+        User objUser = userService.fromDto(userDto);
+        objUser.setId(id);
+        userService.update(objUser);
+        return ResponseEntity.noContent().build();
+    }
+
 }
