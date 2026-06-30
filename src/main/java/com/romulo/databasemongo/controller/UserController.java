@@ -2,6 +2,7 @@ package com.romulo.databasemongo.controller;
 
 import java.net.URI;
 
+import com.romulo.databasemongo.domain.Post;
 import com.romulo.databasemongo.domain.User;
 import com.romulo.databasemongo.dto.UserDto;
 import com.romulo.databasemongo.service.UserService;
@@ -56,5 +57,12 @@ public class UserController {
         userService.update(objUser);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/posts")
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+        User user = userService.findById(id);
+        return ResponseEntity.ok().body(user.getPosts());
+    }
+
 
 }
