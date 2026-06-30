@@ -1,6 +1,6 @@
 package com.romulo.databasemongo.config;
 
-import com.romulo.databasemongo.Util.Util;
+import com.romulo.databasemongo.util.Util;
 import com.romulo.databasemongo.repository.PostRepository;
 import com.romulo.databasemongo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class Instantiation implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-
+        //Teste de git reset --soft HEAD~1
         String mes = "0106";
         System.out.println(Util.extraiMes(mes));
 

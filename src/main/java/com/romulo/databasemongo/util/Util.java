@@ -1,6 +1,4 @@
-package com.romulo.databasemongo.Util;
-
-import com.romulo.databasemongo.domain.Post;
+package com.romulo.databasemongo.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

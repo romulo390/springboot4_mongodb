@@ -1,6 +1,6 @@
 package com.romulo.databasemongo.controller;
 
-import com.romulo.databasemongo.Util.Util;
+import com.romulo.databasemongo.util.Util;
 import com.romulo.databasemongo.domain.Post;
 import com.romulo.databasemongo.service.PostService;
 import org.springframework.http.ResponseEntity;
